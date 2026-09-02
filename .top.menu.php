@@ -1,0 +1,53 @@
+<?
+$aMenuLinks = Array(
+	Array(
+		"Главная", 
+		"/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Объекты", 
+		"/buildings/", 
+		Array("/stroyawiesya_doma/"), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Квартиры", 
+		"?/#/macrocatalog/complexes/list?studio=null&category=flat&activity=sell", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Новости", 
+		"/news/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"О нас", 
+		"/about/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Контакты", 
+		"/contacts/", 
+		Array(), 
+		Array(), 
+		"" 
+	),
+	Array(
+		"Вакансии", 
+		"/jobs/", 
+		Array(), 
+		Array(), 
+		"" 
+	)
+);
+?>

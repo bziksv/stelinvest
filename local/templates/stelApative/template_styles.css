@@ -1,0 +1,103 @@
+div.editor_dialog div.content{
+    padding-top: 0;
+}
+
+div.block-alert{
+	margin: 0 0 1rem;
+	padding: 20px 30px 20px 70px;
+	position: relative;
+    font-size: 16px;
+    font-weight: 400;
+}
+div.block-alert::before{
+	content: '';
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 50%;
+    left: 25px;
+    margin-top: -15px;
+}
+div.block-alert p{
+	margin: .75em 0;
+}
+
+div.block-alert.warning::before{background-image: url(/local/templates/stelApative/images/icon_1.png);}
+div.block-alert.question::before{background-image: url(/local/templates/stelApative/images/icon_2.png);}
+div.block-alert.danger::before{background-image: url(/local/templates/stelApative/images/icon_3.png);}
+div.block-alert.check::before{background-image: url(/local/templates/stelApative/images/icon_4.png);}
+
+div.block-alert.warning{
+	background-color: #fff4d4;
+    background: linear-gradient(to right,#fff4d4 0,#ffeadc 100%);
+}
+div.block-alert.question{
+	background: #e3f1f4;
+    background: linear-gradient(to right,#e3f1f4 0,#e3edff 100%);
+}
+div.block-alert.danger{
+	background-color: #ffe3db;
+    background: linear-gradient(to right,#ffe3db 0,#ffebd8 100%);
+}
+div.block-alert.check{
+	background-color: #def9e5;
+    background: linear-gradient(to right,#def9e5 0,#effbce 100%);
+}
+
+.snipet-block{
+	border: 4px solid #3e54ff;
+    padding: 40px 50px;
+    text-align: center;
+    margin: 0 0 1rem;
+}
+.snipet-block span{
+	font-size: 19px;
+    font-weight: 500;
+}
+.snipet-block a{
+	border: 4px solid #3e54ff;
+    padding: 7px 20px;
+    text-decoration: none;
+    margin-left: 30px;
+    color: black;
+	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+}
+
+.snipet-block a:hover {
+    background-color: #3e54ff;
+    border-color: #3e54ff;
+    color: #fff;
+}
+
+.tag-menu .list {
+	margin-bottom: 10px;
+	overflow: hidden;
+	height: 29px;
+}
+.tag-menu .list.open {
+	overflow: unset;
+	height: auto;
+}
+.tag-menu .list a {		
+	color: #3e54ff;
+	text-decoration: none;
+	border: 1px solid #3e54ff;
+	padding: 2px 10px;
+	white-space: nowrap;
+	display: inline-block;
+	margin-bottom: 5px;
+}
+.tag-menu .list a:hover {
+	color: #FFF;
+	background-color: #3e54ff;
+}
+.tag-menu .control {
+	
+}
+.tag-menu .control .open {
+	color: #FFF;
+	background-color: #3e54ff;
+	padding: 4px 10px;
+	cursor: pointer;
+}

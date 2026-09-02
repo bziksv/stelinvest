@@ -1,0 +1,1698 @@
+/* global SITEPARAMS, mess, Waves, ScrollMagic, ymaps, Share, setHeightItems, arJsonBuids, arJsonBuilds, SVG, NProgress, Roomberry */
+
+"use strict";
+
+var App = function () {
+
+    var _options = {
+        siteLang: "ru", // lang message
+        templatePath: "" // path template
+    };
+    if (typeof SITEPARAMS !== "undefined") {
+        _options = SITEPARAMS;// параметры сайта, к примеру путь к шаблону, название и тд
+    }
+
+    function init() {
+        svg4everybody();
+        _readMore();
+        _mobileMenu();
+        _initFilter();
+        _responsiveBg();
+        _initCarusel();
+        _initScroll();
+        _initWave();
+        _initShare();
+        _initModal();
+        _initCollapseJobsHash();
+        _initCustomInput();
+        _initPopupForm();
+        _initRewards();
+        _initFancybox();
+        _routeObjectDetail();
+        _scrollArchor();
+
+        if (navigator.userAgent.match(/Trident\/7\./)) { // if IE scroll and position fixed
+            $('body').on("mousewheel", function () {
+                event.preventDefault();
+                var wheelDelta = event.wheelDelta;
+                var currentScrollPosition = window.pageYOffset;
+                window.scrollTo(0, currentScrollPosition - wheelDelta);
+            });
+        }
+    }
+
+    function load() {
+        _mainParalax();
+        setHeightItems.init();     
+    }
+    
+    function isTouch(){
+        return ('ontouchstart' in document.documentElement) ? true : false;
+    }    
+    //scroll to animate element
+    function _scrollArchor(){
+        $('a.js-link-scroll[href^="#"]').click(function(){
+            var el = $(this).attr('href');
+            var $el = $(el);
+            if($el.length > 0){
+                var offset = $el.data('offset');
+                if(!offset) {offset = 0;};
+                $('html, body').animate({scrollTop: ($el.offset().top - offset)}, 800);
+                return false; 
+            }
+        });
+    }
+    // fancybox init params data-fancy
+    function _initFancybox(){
+        var links = $('[data-fancy] a');
+        links.fancybox({
+            hash: false,
+            animationEffect: "fade",
+            buttons: [
+                'thumbs',
+                'close'
+            ],
+            beforeShow: function () {
+                var scW = _getScrollbarWidth();
+                $(".overflow-fix-m").css({ "marginRight": scW });
+                $(".overflow-fix-p").css({ "paddingRight": scW });
+                $(".overflow-fix-pos").css({ "right": scW });
+            },
+            afterClose: function () {
+                $(".overflow-fix-m").css({ "marginRight": '' });
+                $(".overflow-fix-p").css({ "paddingRight": '' });
+                $(".overflow-fix-pos").css({ "right": '' });
+            }
+        });
+    };
+    /**
+     * награды
+     */
+    function _initRewards(){
+        var links = $(".rewards-list__link");
+        links.fancybox({
+            hash: false,
+            animationEffect: "fade",
+            buttons: [
+                'thumbs',
+                'close'
+            ],
+            beforeShow: function () {
+                var scW = _getScrollbarWidth();
+                $(".overflow-fix-m").css({ "marginRight": scW });
+                $(".overflow-fix-p").css({ "paddingRight": scW });
+                $(".overflow-fix-pos").css({ "right": scW });
+            },
+            afterClose: function () {
+                $(".overflow-fix-m").css({ "marginRight": '' });
+                $(".overflow-fix-p").css({ "paddingRight": '' });
+                $(".overflow-fix-pos").css({ "right": '' });
+            }
+        });
+    }
+    /**
+     * события модальные окна
+     */
+    function _initModal() {
+        /*
+         * позиционирование элементов, при скрытии скролла
+         */
+        $('.modal').on('show.bs.modal', function (e) {
+            var scW = _getScrollbarWidth();
+            $(".overflow-fix-m").not("body").css({ "marginRight": scW });
+            $(".overflow-fix-p").not("body").css({ "paddingRight": scW });
+            $(".overflow-fix-pos").not("body").css({ "right": scW });
+        });
+        $('.modal').on('hidden.bs.modal', function (e) {
+            $(".overflow-fix-m").not("body").css({ "marginRight": '' });
+            $(".overflow-fix-p").not("body").css({ "paddingRight": '' });
+            $(".overflow-fix-pos").not("body").css({ "right": '' });
+        });
+    }
+    /**
+     * веб-форма
+     */
+    function _initPopupForm() {
+        // Form jobs add vacancy
+        
+        document.addEventListener("click", function(event){
+            var target = event.target;
+            while(target !== this){
+                if((target.tagName === "A" || target.tagName === "BUTTON") && target.getAttribute("data-target") === "#modal-jobs"){
+                    var form = document.getElementById('form-popup-1'); // id form jobs
+                    if(target.hasAttribute("data-params") && form.form_hidden_11){
+                        form.form_hidden_11.value = target.getAttribute("data-params");
+                    }  
+                    return;
+                } 
+                if((target.tagName === "A" || target.tagName === "BUTTON") && target.getAttribute("data-target") === "#modal-callback"){
+                    var form = document.getElementById('form-popup-2'); // объект
+                    if(target.hasAttribute("data-object") && form.form_textarea_15){
+                        form.form_textarea_15.value = target.getAttribute("data-object");
+                    }
+                    return;
+                }
+                if((target.tagName === "A" || target.tagName === "BUTTON") && target.getAttribute("data-target") === "#modal-order"){
+                    var form = document.getElementById('form-popup-3'); // объект
+                    if(target.hasAttribute("data-object") && form.form_text_19){
+                        form.form_text_19.value = target.getAttribute("data-object");
+                    }
+                    return;
+                }
+                target = target.parentNode;
+            }
+        });
+        // all form ajax
+        var formContainer = document.querySelectorAll(".js-container-form");
+        [].forEach.call(formContainer, function(element, index){
+            element.addEventListener("submit", function(event){
+                if(event.target.tagName === "FORM"){
+                    var form = event.target;
+                    var formID = form.id;
+                    var formAction = form.action;
+                    var formData = new FormData(form);
+                    var xhr = new XMLHttpRequest();
+                    formData.append("web_form_submit", "y");
+                    formData.append("ajax_form", "y"); 
+                    formData.append("WEB_FORM_ID", formData.get('WEB_FORM_ID')); 
+                    xhr.open("POST", formAction, true);
+                    xhr.setRequestHeader('X-REQUESTED-WITH', 'XMLHttpRequest');
+                    xhr.onreadystatechange = function() {
+                        if(this.readyState === 4){
+                            if (this.status === 200) {
+                                var parser = new DOMParser();
+                                var doc = parser.parseFromString(this.responseText,"text/html");
+                                var note = doc.getElementById('note-'+ formID);                                
+                                if(note){
+                                    newNoti(note.innerHTML);
+                                    note.remove();
+                                    $(element).parents(".modal").modal("hide");
+                                } 
+                                document.getElementById("container-" + formID).innerHTML = doc.getElementById("container-" + formID).innerHTML;
+                                _initCustomInput();
+                            } else {
+                                console.error('error: ' + (this.status ? this.statusText : 'bad request'));
+                            }
+                        } 
+                    };
+                    xhr.send(formData);
+                    event.preventDefault();
+                } 
+            });
+        });
+    }
+    /**
+     * notification
+     * @param {*} text 
+     */
+    function newNoti(text) {
+        var container = document.querySelector(".b-notification");
+        var delay = 5000;
+        var duration = 250;
+        var timer;
+        if (!container) {
+            container = document.createElement("div");
+            container.className = "b-notification";
+            document.body.appendChild(container);
+        }
+        var item = document.createElement("div");
+        item.className = "b-notification__item";
+        item.innerHTML = text;
+        var theFirstChild = container.firstChild;
+        if (theFirstChild) {
+            container.insertBefore(item, theFirstChild);
+        } else {
+            container.appendChild(item);
+        }
+
+        timerShowNoti.apply(item);
+        item.addEventListener("mouseenter", hoverNoti, false);
+        item.addEventListener("mouseleave", timerShowNoti, false);
+        item.addEventListener("click", hideNoti, false);
+
+        function timerShowNoti() {
+            var self = this;
+            clearTimeout(timer);
+            timer = setTimeout(function () {
+                self.classList.add("hide");
+                setTimeout(function () {
+                    container.removeChild(self);
+                }, duration);
+            }, delay);
+        }
+        function hoverNoti() {
+            clearTimeout(timer);
+        }
+        function hideNoti() {
+            var self = this;
+            clearTimeout(timer);
+            self.classList.add("hide");
+            self.removeEventListener("click", hideNoti, false);
+            self.removeEventListener("mouseenter", hoverNoti, false);
+            self.removeEventListener("mouseleave", timerShowNoti, false);
+            setTimeout(function () {
+                self.parentNode.removeChild(self);
+            }, duration);
+        }
+    }
+
+    /**
+     * custom upload file
+     */
+    function _initCustomInput() {
+        var wrapFile = document.querySelectorAll(".file-upload");
+        [].forEach.call(wrapFile, function (element, index) {
+            if(element.hasAttribute("data-file-upload")) return;
+            var file = element.querySelector('input[type="file"]');
+            var elText = element.querySelector('.file-upload__text');
+            file.addEventListener("change", function (event) {
+                var textResult = "";
+                var clearBtn = element.querySelector('.file-upload__btn-clear');
+                if (this.files.length > 1) {
+                    textResult = this.files.length + " " + declOfNum(this.files.length, [mess.file, mess.files, mess.files_more]);
+                } else {
+                    textResult = this.files[0].name;
+                }
+                elText.innerHTML = textResult;
+                if (!clearBtn) {
+                    clearBtn = document.createElement("span");
+                    clearBtn.className = "file-upload__btn-clear";
+                    clearBtn.innerHTML = "&times;";
+                    element.appendChild(clearBtn);
+                    clearBtn.addEventListener("click", function (event) {
+                        file.value = "";
+                        elText.innerHTML = mess.upload_btn_text;
+                        element.removeChild(clearBtn);
+                    }, false);
+                }
+            }, false);
+            element.setAttribute("data-file-upload", "init");
+        });
+
+        function declOfNum(number, titles) {
+            var cases = [2, 0, 1, 1, 1, 2];
+            return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
+        }
+    }
+    /**
+     * hash для вкладок "вакансии"
+     */
+    function _initCollapseJobsHash() {
+        var anchor = window.location.hash.slice(5);
+        if (anchor) {
+            var collapse = document.getElementById(anchor);
+            if (collapse) {
+                $(collapse).collapse('show');
+            }
+        }
+        $('.jobs .collapse').on('show.bs.collapse', function () {
+            window.location.hash = "tab-" + this.id;
+        });
+        $('.jobs .collapse').on('hide.bs.collapse', function () {
+            history.pushState("", document.title, window.location.pathname);
+
+        });
+    }
+
+    /**
+     * init Wave button
+     */
+    function _initWave() {
+        Waves.attach('.btn', ['waves-light']);
+        Waves.attach('.custom-checkbox__wave > span', ['waves-circle']);
+        Waves.init();
+    }
+    /**
+     * scroll animate
+     */
+    function _initScroll() {
+        var controller = new ScrollMagic.Controller();
+        var itemRevers = document.querySelector(".list-builds-main__item_reverse");
+        var crane = document.querySelector(".page-bg__crane");
+
+        if (itemRevers && crane) {
+            new ScrollMagic.Scene({
+                triggerElement: itemRevers,
+                duration: 0,
+                offset: -100,
+                triggerHook: "onEnter",
+                reverse: true
+            })
+                .setClassToggle(crane, "is-move")
+                .addTo(controller);
+        }
+
+        $(".list-slider").each(function (index) {
+            var self = this;
+            new ScrollMagic.Scene({
+                triggerElement: self,
+                duration: 0,
+                offset: -100,
+                triggerHook: "onCenter",
+                reverse: true
+            })
+                .setClassToggle(self, "is-shadow")
+                .addTo(controller);
+        });
+    }
+    /**
+     * все карусели
+     */
+    function _initCarusel() {
+        
+        $('.full-slider').slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: false,
+            fade: true,
+            asNavFor: '.thumbs-carusel',
+            prevArrow: '<button type="button" class="slick-prev-xs is-dark"><i class="fas fa-long-arrow-alt-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next-xs is-dark"><i class="fas fa-long-arrow-alt-right"></i></button>',
+            responsive: [
+                {
+                    breakpoint: 576,
+                    settings: {
+                        arrows: true
+                    }
+                }
+            ]
+        });
+        $('.thumbs-carusel').slick({
+            slidesToShow: 5,
+            slidesToScroll: 1,
+            asNavFor: '.full-slider',
+            dots: false,
+            centerMode: true,
+            centerPadding: 0,
+            focusOnSelect: true,
+            prevArrow: '<button type="button" class="slick-prev-xs is-dark"><i class="fas fa-long-arrow-alt-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next-xs is-dark"><i class="fas fa-long-arrow-alt-right"></i></button>',
+            responsive: [
+                {
+                    breakpoint: 767,
+                    settings: {
+                        slidesToShow: 3
+                    }
+                },
+                {
+                    breakpoint: 575,
+                    settings: {
+                        slidesToShow: 1
+                    }
+                }
+            ]
+        });
+
+        // carusel из 4 фото максимум
+        $('.news-list__carusel, .builds-list__carusel').slick({
+            dots: true,
+            infinite: true,
+            speed: 300,
+            arrows: false,
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            prevArrow: '<button type="button" class="slick-prev"><i class="fas fa-long-arrow-alt-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next"><i class="fas fa-long-arrow-alt-right"></i></button>',
+            customPaging: function (slider, i) {
+                var prefix = (i >= 10) ? "" : "0";
+                return $('<button type="button"><span class="line"></span><span class="index">' + prefix + (i + 1) + '</span></button>');
+            },
+            responsive: [
+                {
+                    breakpoint: 1366,
+                    settings: {
+                        slidesToShow: 3
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1
+                    }
+                }
+            ]
+        });
+
+        function setFancySlider(slider) {
+            var links = $(slider).find(".slick-slide:not(.slick-cloned) a");
+            links.fancybox({
+                hash: false,
+                animationEffect: "fade",
+                buttons: [
+                    'thumbs',
+                    'close'
+                ],
+                beforeShow: function () {
+                    var scW = _getScrollbarWidth();
+                    $(".overflow-fix-m").css({ "marginRight": scW });
+                    $(".overflow-fix-p").css({ "paddingRight": scW });
+                    $(".overflow-fix-pos").css({ "right": scW });
+                },
+                afterClose: function () {
+                    $(".overflow-fix-m").css({ "marginRight": '' });
+                    $(".overflow-fix-p").css({ "paddingRight": '' });
+                    $(".overflow-fix-pos").css({ "right": '' });
+                }
+            });
+        }
+
+        $('.photo-carusel').on('setPosition', function () {
+            setFancySlider(this);
+        }).on('init', function () {
+            setFancySlider(this);
+        }).slick({
+            dots: false,
+            infinite: true,
+            speed: 300,
+            arrows: true,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            prevArrow: '<button type="button" class="slick-prev"><i class="fas fa-long-arrow-alt-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next"><i class="fas fa-long-arrow-alt-right"></i></button>',
+            customPaging: function (slider, i) {
+                var prefix = (i >= 10) ? "" : "0";
+                return $('<button type="button"><span class="line"></span><span class="index">' + prefix + (i + 1) + '</span></button>');
+            },
+            responsive: [
+                {
+                    breakpoint: 1366,
+                    settings: {
+                        slidesToShow: 3
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1
+                    }
+                }
+            ]
+        });
+        // слайдер фоток
+        $('.list-slider').on('setPosition', function () {
+            setFancySlider(this);
+        }).on('init', function () {
+            setFancySlider(this);
+        }).slick({
+            dots: true,
+            arrows: false,
+            infinite: true,
+            speed: 500,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            prevArrow: '<button type="button" class="slick-prev"><i class="fas fa-long-arrow-alt-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next"><i class="fas fa-long-arrow-alt-right"></i></button>',
+            customPaging: function (slider, i) {
+                var prefix = (i >= 10) ? "" : "0";
+                return $('<button type="button"><span class="line"></span><span class="index">' + prefix + (i + 1) + '</span></button>');
+            }
+        });
+    }
+    /**
+     * параллакс на главной странице
+     */
+    function _mainParalax() {
+        var $img = $(".main-bg__img");
+        var $mask = $(".main-bg__mask");
+        var $bgImg = $(".main-bg__img-bg");
+
+        function setPosition() {
+            var heightMask = $mask.height();
+            var top = heightMask - 1;
+            var heightBgImg = 0;
+            $bgImg.height(0);
+            heightBgImg = document.documentElement.scrollHeight - heightMask;
+            if (heightBgImg < 0) {
+                heightBgImg = 0;
+            }
+            $img.css({ position: "fixed" });
+            $bgImg.css({ top: top, height: heightBgImg, opacity: 1 });
+        }
+
+        setPosition();
+
+        $(window).on("resize", function (e) {
+            setTimeout(setPosition, 50);
+        });
+
+        $(window).on("scroll", function (e) {
+            var otTop = $(window).scrollTop();
+            $img.css({ "top": -(otTop * .25) });
+        });
+    }
+
+    /**
+     * мобильное меню
+     */
+    function _mobileMenu() {
+        var $buttonToggle = $("button[data-toggle-mobile-menu]");
+        var $mobMenu = $("div[data-mobile-menu]");
+        var $body = $("body");
+        var timerResize;
+
+        $buttonToggle.on("click", function (e) {
+            if ($mobMenu.hasClass("is-active")) {
+                $buttonToggle.removeClass("is-active");
+                $mobMenu.removeClass("is-fade");
+                $body.removeClass("page_overflow");
+                setTimeout(function () {
+                    $mobMenu.removeClass("is-active");
+                }, 150);
+            } else {
+                $buttonToggle.addClass("is-active");
+                $mobMenu.addClass("is-active");
+                setTimeout(function () {
+                    $mobMenu.addClass("is-fade");
+                    $body.addClass("page_overflow");
+                }, 20);
+            }
+        });
+
+        $(window).on("resize", closeMenu);
+
+        function closeMenu() {
+            clearTimeout(timerResize);
+            timerResize = setTimeout(function () {
+                var windowWidth = $(window).width();
+                if ($mobMenu.hasClass("is-active") && windowWidth > 992) {
+                    $buttonToggle.removeClass("is-active");
+                    $mobMenu.removeClass("is-fade is-active");
+                    $body.removeClass("page_overflow");
+                }
+            }, 50);
+        }
+        
+        //nav-page menu
+        var navPage = document.querySelectorAll(".nav-page");
+        var touch = ('ontouchstart' in document.documentElement) ? true : false;
+        [].forEach.call(navPage, function(element,index){
+            var elText = element.querySelector(".nav-page__active-text");
+            if(touch) {
+                element.classList.add("is-touch");
+            }
+            if(elText){
+                elText.addEventListener("touchstart", function(event){
+                    element.classList.toggle("is-open");
+                }, false);
+            }
+        });
+        document.addEventListener("touchstart", function(event){
+            var target = event.target;
+            while(target !== this ){
+                if(target.classList.contains("nav-page__wrap") ||
+                   target.classList.contains("nav-page__dropdown")
+                ){
+                    return;
+                }
+                target = target.parentNode;
+            }
+            var navPageOpen = document.querySelectorAll(".nav-page.is-open");
+            [].forEach.call(navPageOpen, function(element,index){
+                element.classList.remove("is-open");
+            });
+        }, false);
+
+    }
+
+    /**
+     * фильтр
+     */
+    function _initFilter() {
+        var $buttonShowFilter = $("button[data-show-filter]");
+        var $buttonHideFilter = $("button[data-hide-filter]");
+        var $filter = $(".filter");
+        var $body = $("body");
+        var timerResize;
+
+        $buttonShowFilter.on("click", function (e) {
+            $filter.addClass("is-active");
+            setTimeout(function () {
+                $filter.addClass("is-fade");
+                $body.addClass("page_overflow");
+            }, 250);
+        });
+        $buttonHideFilter.on("click", function (e) {
+            $filter.removeClass("is-fade");
+            $body.removeClass("page_overflow");
+            setTimeout(function () {
+                $filter.removeClass("is-active");
+            }, 250);
+        });
+
+        $(window).on("resize", closeFilter);
+
+        function closeFilter() {
+            clearTimeout(timerResize);
+            timerResize = setTimeout(function () {
+                var windowWidth = $(window).width();
+                if ($filter.hasClass("is-active") && windowWidth > 576) {
+                    $filter.removeClass("is-fade is-active");
+                    $body.removeClass("page_overflow");
+                }
+            }, 50);
+        }
+
+    }
+
+    /**
+     * читать далее
+     */
+    function _readMore() {
+        var $readMore = $(".readmore");
+
+        $readMore.each(function (index) {
+            var $readMoreItem = $(this);
+            var $readMoreLink = $readMoreItem.find(".readmore__link");
+            toggleReadMore($readMoreLink, $readMore);
+            $readMoreLink.on("click", function (e) {
+                var $self = $(this);
+                toggleReadMore($self, $readMoreItem);
+
+            });
+        });
+
+        function toggleReadMore($el, $readMore) {
+            var textOpen = $el.data("text-open");
+            var textClose = $el.data("text-close");
+            if ($readMore.hasClass("is-open")) {
+                $el.text(textOpen);
+                $readMore.removeClass("is-open");
+            } else {
+                $el.text(textClose);
+                $readMore.addClass("is-open");
+            }
+        }
+    }
+
+    /**
+     * ретина фоновое изображение 
+     */
+    function ResponsiveBackgroundImage(element) {
+        this.element = element;
+        this.img = element.querySelector('img');
+        this.src = '';
+
+        var _self = this;
+        this.img.addEventListener('load', function () {
+            _self.update();
+        }, false);
+
+        if (this.img.complete) {
+            this.update();
+        }
+    };
+    ResponsiveBackgroundImage.prototype.update = function () {
+        var src = typeof this.img.currentSrc !== 'undefined' ? this.img.currentSrc : this.img.src;
+        if (this.src !== src) {
+            this.src = src;
+            this.element.style.backgroundImage = 'url("' + this.src + '")';
+        }
+    };
+    function _responsiveBg() {
+        var elements = document.querySelectorAll('[data-responsive-background-image]');
+        for (var i = 0; i < elements.length; i++) {
+            new ResponsiveBackgroundImage(elements[i]);
+        }
+    }
+    /**
+     * ширина скролла браузера
+     */
+    function _getScrollbarWidth() {
+        var outer = document.createElement("div");
+        outer.style.visibility = "hidden";
+        outer.style.width = "100px";
+        outer.style.msOverflowStyle = "scrollbar";
+        document.body.appendChild(outer);
+        var widthNoScroll = outer.offsetWidth;
+        // force scrollbars
+        outer.style.overflow = "scroll";
+        // add innerdiv
+        var inner = document.createElement("div");
+        inner.style.width = "100%";
+        outer.appendChild(inner);
+        var widthWithScroll = inner.offsetWidth;
+        // remove divs
+        outer.parentNode.removeChild(outer);
+        return widthNoScroll - widthWithScroll;
+    }
+
+    /**
+     * поделиться в соц сетях
+     */
+    function _initShare() {
+
+        $(".share__btn").on('click', function (e) {
+            var $wrapSoc = $(this).parents(".share");
+            var $icon = $wrapSoc.find(".share__icon");
+            if ($wrapSoc.length > 0) {
+                if ($wrapSoc.hasClass("is-active")) {
+                    $wrapSoc.removeClass("is-active");
+                    setTimeout(function () {
+                        $icon.removeClass("fa-long-arrow-alt-left").addClass("fa-share-alt");
+                    }, 250);
+                } else {
+                    $wrapSoc.addClass("is-active");
+                    $icon.removeClass("fa-share-alt").addClass("fa-long-arrow-alt-right");
+                    setTimeout(function () {
+                        $icon.removeClass("fa-long-arrow-alt-right").addClass("fa-long-arrow-alt-left");
+                    }, 250);
+                }
+            }
+        });
+
+        $(document).on('click', '[data-soc-share]', function (e) {
+            Share.go(this);
+            e.preventDefault();
+        });
+    }
+    /**
+     * yandex карта в контактах
+     */
+    function yaMapContacts() {
+                
+        loadScript("https://api-maps.yandex.ru/2.1/?apikey=8df11658-721a-456b-8c58-c7739c386faa&lang=ru_RU", function(){
+            ymaps.ready(function() {   
+                var map;
+                var timer;
+                var elementMap = document.getElementById("map-ya-contacts");
+                var coord;
+                var img = _options.templatePath + '/svg/marker.svg';
+
+                if (!elementMap) return;
+                coord = JSON.parse(elementMap.getAttribute("data-coord"));
+                if (!Array.isArray(coord)) return;
+
+                map = new ymaps.Map("map-ya-contacts", {
+                    center: coord,
+                    zoom: 15,
+                    controls: []
+                });
+                if ('ontouchstart' in document.documentElement) {
+                    map.behaviors.disable('drag');
+                    map.behaviors.disable('scrollZoom');
+                    map.behaviors.disable('dblClickZoom');
+                    //map.behaviors.disable('multiTouch');
+                }
+
+                var myPlacemark = new ymaps.Placemark(coord, {}, {
+                    iconLayout: 'default#image',
+                    iconImageHref: img,
+                    iconImageSize: [150, 85],
+                    iconImageOffset: [-15, -85]
+                });
+                map.geoObjects.add(myPlacemark);
+
+                setCenter();
+
+                window.addEventListener("resize", function () {
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        map.container.fitToViewport();
+                        setCenter(); // координаты цетра менять взависимости от размера экрана
+                    }, 100);
+                }, false);
+
+                function setCenter() {
+                    var width = $(window).width();
+                    var newCoord = coord;
+                    if (width >= 992 && width < 1200) {
+                        newCoord = [coord[0] - .002, coord[1] - .009];
+                    } else if (width >= 1200) {
+                        newCoord = [coord[0] - .002, coord[1] - .015];
+                    }
+                    map.setCenter(newCoord);
+                }
+            });
+        });
+    }
+    /**
+    * yandex карта c объектами
+    * @param {object} arJsonBuilds
+    * @returns {false}
+    */
+    function initYaMapInBuilds(arJsonBuilds) {
+        // ya map
+        loadScript("https://api-maps.yandex.ru/2.1/?apikey=8df11658-721a-456b-8c58-c7739c386faa&lang=ru_RU", function(){
+            ymaps.ready(function() {   
+                var map,
+                timer,
+                elementMap = document.getElementById("ya-map-builds"),
+                markers = {
+                    "under-construction" : _options.templatePath + '/svg/marker-new.svg',
+                    "planned":  _options.templatePath + '/svg/marker-planned.svg',
+                    "built": _options.templatePath + '/svg/marker-ready.svg'
+                },
+                zIndexs = {
+                    "under-construction" : 3,
+                    "planned":  2,
+                    "built": 1
+                },
+                plColors = {
+                    "under-construction" : '#2ec95c',
+                    "planned":  "#3e54ff",
+                    "built": "#b3b3b3"
+                },
+                clusterer = new ymaps.Clusterer({
+                    clusterIconLayout: 'default#pieChart',
+                    clusterIconPieChartRadius: 24,
+                    clusterIconPieChartCoreRadius: 18,
+                    clusterIconPieChartStrokeWidth: 2,
+                    hasBalloon: false
+                }),
+                geoObjects = [];
+                //карта
+                if (!elementMap) return;
+                if (!Array.isArray(arJsonBuilds)) return;
+                
+                map = new ymaps.Map("ya-map-builds", {
+                    center: [51.660524, 39.199826],
+                    zoom: 12,
+                    controls: []
+                });
+                if ('ontouchstart' in document.documentElement) {
+                    map.behaviors.disable('drag');
+                    map.behaviors.disable('scrollZoom');
+                    map.behaviors.disable('dblClickZoom');
+                    //map.behaviors.disable('multiTouch');
+                }
+
+                map.controls.add('routeEditor');
+                map.controls.add('zoomControl');
+
+                for (var index = 0; index < arJsonBuilds.length; index++) {
+                    var element = arJsonBuilds[index];
+                    if(element.coord.length !== 2) continue;
+                    var myPlacemark = new ymaps.Placemark(element.coord, {
+                        hintContent: element.name,
+                        balloonContentBody: element.text
+                    }, {
+                        iconLayout: 'default#image',
+                        iconImageHref: markers[element.status],
+                        iconImageSize: [24, 36],
+                        iconImageOffset: [-12, -36],
+                        zIndex: zIndexs[element.status],
+                        iconColor: plColors[element.status]
+                    });
+                    geoObjects.push(myPlacemark);
+                } 
+                
+                clusterer.add(geoObjects);
+                map.geoObjects.add(clusterer);
+
+                map.setBounds(clusterer.getBounds(), {
+                    checkZoomRange: true
+                });
+
+                window.addEventListener("resize", function () {
+                    clearTimeout(timer);
+                    timer = setTimeout(function () {
+                        map.container.fitToViewport();
+                    }, 100);
+                }, false);
+            });
+        });  
+    }
+    /**
+     * init Detail Apartament
+     * @returns {undefined}
+     */
+    function initDetailApartament(){
+                
+        //init fancybox view 360
+        $('a[data-view360]').fancybox({
+            hash: false,
+            animationEffect: "fade",
+            touch: false,
+            buttons: [
+                'close'
+            ],
+            beforeShow: function () {
+                var scW = _getScrollbarWidth();
+                $(".overflow-fix-m").css({ "marginRight": scW });
+                $(".overflow-fix-p").css({ "paddingRight": scW });
+                $(".overflow-fix-pos").css({ "right": scW });
+             /* var id = $('#roomberry-widget').data("id");
+                if(id){
+                    var s = document.createElement('script');
+                    s.src = 'https://widget.roomberry.ru/main/build/js/main.js?v8';
+                    s.async  = true;
+                    document.head.appendChild(s);
+                    s.onload = function() {
+                        var widget = new Roomberry.widget('#roomberry-widget');
+                        widget.set({
+                            width: 720,
+                            height: 480,
+                            planId: id
+                        });
+                        widget.run();
+                    };
+                }  */ 
+                
+            },
+            afterClose: function () {
+                $(".overflow-fix-m").css({ "marginRight": '' });
+                $(".overflow-fix-p").css({ "paddingRight": '' });
+                $(".overflow-fix-pos").css({ "right": '' });
+            }
+        });
+        
+        //init fancybox slider detail
+        function setFancyDetailApartament(slider) {
+            var links = $(slider).find(".slick-slide:not(.slick-cloned) a");
+            links.fancybox({
+                hash: false,
+                animationEffect: "fade",
+                buttons: [
+                    'thumbs',
+                    'close'
+                ],
+                beforeShow: function () {
+                    var scW = _getScrollbarWidth();
+                    $(".overflow-fix-m").css({ "marginRight": scW });
+                    $(".overflow-fix-p").css({ "paddingRight": scW });
+                    $(".overflow-fix-pos").css({ "right": scW });
+                },
+                afterClose: function () {
+                    $(".overflow-fix-m").css({ "marginRight": '' });
+                    $(".overflow-fix-p").css({ "paddingRight": '' });
+                    $(".overflow-fix-pos").css({ "right": '' });
+                }
+            });
+        }
+        //init slider detail
+        $('.b-photo__carusel').on('init', function (event, slick, currentSlide) {
+            $(".b-photo__thumds-item_flex").eq(0).addClass("is-active"); // при старте первый тайл активный
+            setFancyDetailApartament(this);
+        }).on('afterChange', function (event, slick, currentSlide) {
+            $(".b-photo__thumds-item_flex").removeClass("is-active"); // при смене менять активный тайл
+            $(".b-photo__thumds-item_flex").eq(currentSlide).addClass("is-active");
+        }).on('setPosition', function () {
+            setFancyDetailApartament(this);
+        }).slick({
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: false,
+            fade: true,
+            asNavFor: '.b-photo__thumds-carusel'
+        });  
+        $('.b-photo__thumds-carusel').slick({
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            focusOnSelect: false,
+            dots: false,
+            centerPadding: 0,
+            centerMode: false,
+            asNavFor: '.b-photo__carusel',
+            prevArrow: '<button type="button" class="slick-prev-xs is-dark"><i class="fas fa-long-arrow-alt-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next-xs is-dark"><i class="fas fa-long-arrow-alt-right"></i></button>',
+            responsive: [
+                {
+                    breakpoint: 767,
+                    settings: {
+                        slidesToShow: 4
+                    }
+                },
+                {
+                    breakpoint: 575,
+                    settings: {
+                        slidesToShow: 1
+                    }
+                }
+            ]
+        });
+        // при клике на тайл, менять слайд активный
+        $(".b-photo__thumds-carusel").on("click", ".slick-slide", function(e){
+            $(this).siblings().removeClass("slick-current");
+            $(this).addClass("slick-current");
+            var currentSlide = $(".b-photo__thumds-carusel .slick-slide").index(this);
+            $('.b-photo__carusel').slick('slickGoTo', currentSlide, true);
+        }); 
+         
+        // при клике на тайл, менять слайд активный
+        $(".b-photo__thumds-item_flex").on("click", function(e){
+            $(this).siblings().removeClass("is-active");
+            $(this).addClass("is-active");
+            var currentSlide = $(".b-photo__thumds-tiles .b-photo__thumds-item_flex").index(this);
+            $('.b-photo__carusel').slick('slickGoTo', currentSlide, true);
+        }); 
+         
+    }
+    /**
+     * init queue build
+     * @param {object} arJsonApartamentsParams object, coord 
+     * @returns {undefined}
+     */
+    function initDetailFloor(arJsonApartamentsParams){
+
+        initHighlighteMapSvg();
+        /**
+         * draw svg map queus
+         * @returns {undefined}
+         */
+        function initHighlighteMapSvg(){
+            var loadImgFlag = false;
+            var img = document.getElementById("img-build-select");
+            if(!arJsonApartamentsParams.apartaments)return;
+            if(!img) return;
+            img.onload = function(e){
+                if(loadImgFlag) return;
+                loadImgFlag = true;
+                var img = e.target;
+                var draw = SVG('svg-build-select');
+                draw.viewbox({ x: 0, y: 0, width: img.naturalWidth, height: img.naturalHeight});
+                var drawSold = SVG('svg-build-sold');
+                drawSold.viewbox({ x: 0, y: 0, width: img.naturalWidth, height: img.naturalHeight });
+                arJsonApartamentsParams.apartaments.forEach(function(element, index){
+                    var group = draw.group();
+                    group.addClass('svg-group-hover');
+                    if(isTouch()){
+                        group.addClass('is-touch');
+                    }
+                    if(element.hide_link !== "Y"){ //если разрешен показ ссылк
+                        var link = draw.link(element.link); //создаем ссылку
+                        link.attr("data-switch-object", "svg");
+                        var polygon = link.polygon(element.coord)
+                            .fill("transparent")
+                            .addClass('svg-hover'); // полигон с подсветкой
+                        if(element.sold === "Y" && element.show_label_sold === "Y"){ // если продано и показ таблички 
+                            link.add(drawSoldLabel(draw, polygon)); 
+                        }
+                        group.add(link);
+                    } else {// если скрыть ссылку
+                        var polygon = draw.polygon(element.coord)
+                            .fill("transparent");
+                        if(element.sold === "Y" && element.show_label_sold === "Y"){ // если продано и показ таблички 
+                            group.add(drawSoldLabel(draw, polygon)); 
+                        }
+                        group.add(polygon);
+                    }
+                    // события при наведение, подсветка, показ "Продано"
+                    group.on("mouseenter", function() {
+                        this.addClass("is-hover");
+                        var linksApartament = document.querySelector(".list-position-room__link[data-position-apartament='"+element.id+"']"); //hover link
+                        linksApartament.classList.add("is-active");
+                    }).on("mouseleave", function() {
+                        this.removeClass("is-hover");
+                        var linksApartament = document.querySelector(".list-position-room__link[data-position-apartament='"+element.id+"']"); //hover link
+                        linksApartament.classList.remove("is-active");
+                    }).on("touchstart", function() {
+                        SVG.select('g.svg-group-hover').removeClass('is-hover');
+                        var AllLinksApartament = document.querySelectorAll(".list-position-room__link.is-active"); //hover link
+                        [].forEach.call(AllLinksApartament, function(element, index){
+                            element.classList.remove('is-active');
+                        });
+                        this.addClass("is-hover");
+                        var linksApartament = document.querySelector(".list-position-room__link[data-position-apartament='"+element.id+"']"); //hover link
+                        linksApartament.classList.add("is-active");
+                    });
+                    //атрибуты
+                    group.attr({
+                        'id': "apartament_" + element.id,
+                        'title': element.title
+                    });
+                    if(element.sold === "Y"){// если продана, красным фон
+                        drawSold.polygon(element.coord)
+                        .fill("transparent")
+                        .addClass('svg-sold');
+                    } 
+                    
+                });
+            };
+            if(img.complete){
+                var event = document.createEvent('Event');
+                event.initEvent('load', true, true);
+                img.dispatchEvent(event);
+            };
+            
+            /**
+             * 
+             * @param {object} draw  draw svg.js 
+             * @param {object} polygon element svg.js 
+             * @returns {object} group group svg.js
+             */
+            function drawSoldLabel(draw, polygon){
+                var posCenterPolygon = {x: polygon.cx(), y: polygon.cy()}; //получаем центр полигона
+                var groupSoldLabel = draw.group(); // создаем группу
+                groupSoldLabel.addClass('svg-label-sold');
+                groupSoldLabel.rect(98, 28) // добавляем фон
+                    .attr({fill: '#fff', stroke: '#c32b1e', 'stroke-width': 2})
+                    .center(posCenterPolygon.x, posCenterPolygon.y)
+                    .transform({rotation: -45});
+                groupSoldLabel.text(mess.label_sold) // добавляем текст
+                    .font({ fill: '#c32b1e', family: "OpenSansRegular", size:  16})
+                    .center(posCenterPolygon.x - 2, posCenterPolygon.y)
+                    .transform({rotation: -45});
+                return groupSoldLabel; // возвращаем группу svg
+            }
+            
+            //hover queue list => map
+            var linksApartament = document.querySelectorAll(".list-position-room__link[data-position-apartament]");
+            [].forEach.call(linksApartament, function(element, index){
+                if(!element.hasAttribute("data-position-apartament")) return;
+                var dataRoom = element.getAttribute("data-position-apartament");
+                element.addEventListener("mouseenter", function(event){
+                  var group = SVG.get("apartament_"+dataRoom);
+                   if(group){
+                    group.addClass("is-hover");
+                   }   
+                }, false);
+                element.addEventListener("mouseleave", function(event){
+                    var group = SVG.get("apartament_"+dataRoom);
+                    if(group){
+                        group.removeClass("is-hover");
+                    }     
+                }, false);
+            });
+        }     
+    }
+    /**
+     * init queue build
+     * @param {type} arJsonQueueParams object, coord 
+     * @returns {undefined}
+     */
+    function initDetailQueue(arJsonQueueParams){
+                
+        initHighlighteMapSvg();
+        /**
+         * draw svg map queus
+         * @returns {undefined}
+         */
+        function initHighlighteMapSvg(){
+            var loadImgFlag = false;
+            var img = document.getElementById("img-build-select");
+            if(!arJsonQueueParams.floors)return;
+            if(!img) return;
+            img.onload = function(e){
+                if(loadImgFlag) return;
+                loadImgFlag = true;
+                var img = e.target;
+                var draw = SVG('svg-build-select');
+                draw.viewbox({ x: 0, y: 0, width: img.naturalWidth, height: img.naturalHeight});
+                arJsonQueueParams.floors.forEach(function(element, index){
+                    var link = draw.link(element.link);
+                    link.attr("data-switch-object", "svg");
+                    var polygon = link.polygon(element.coord)
+                        .fill("transparent")
+                        .addClass('svg-hover');
+                    if(isTouch()){
+                        polygon.addClass('is-touch');
+                    }
+                    polygon.on("mouseenter", function() {
+                        this.addClass("is-hover");
+                        var linksQueue = document.querySelector(".choice-section-building__floor-link[data-position-floor='"+element.id+"']"); //hover link
+                        linksQueue.classList.add("is-active");
+                    }).on("mouseleave", function() {
+                        this.removeClass("is-hover");
+                        var linksQueue = document.querySelector(".choice-section-building__floor-link[data-position-floor='"+element.id+"']"); //hover link
+                        linksQueue.classList.remove("is-active");
+                    }).on("touchstart", function() {
+                        SVG.select('polygon.svg-hover').removeClass('is-hover');
+                        var AllLinksQueue = document.querySelectorAll(".choice-section-building__floor-link.is-active"); //hover link
+                        [].forEach.call(AllLinksQueue, function(element, index){
+                            element.classList.remove('is-active');
+                        });
+                        this.addClass("is-hover");
+                        var linksQueue = document.querySelector(".choice-section-building__floor-link[data-position-floor='"+element.id+"']"); //hover link
+                        linksQueue.classList.add("is-active");
+                    });
+                    polygon.attr({
+                        'id': "floor_" + element.id,
+                        'title': element.title
+                    });       
+                });
+            };
+            if(img.complete){
+                var event = document.createEvent('Event');
+                event.initEvent('load', true, true);
+                img.dispatchEvent(event);
+            };
+            
+            //hover queue list => map
+            var linksQueue = document.querySelectorAll(".choice-section-building__floor-link[data-position-floor]");
+            [].forEach.call(linksQueue, function(element, index){
+                if(!element.hasAttribute("data-position-floor")) return;
+                var dataRoom = element.getAttribute("data-position-floor");
+                element.addEventListener("mouseenter", function(event){
+                  var polygon = SVG.get("floor_"+dataRoom);
+                   if(polygon){
+                    polygon.addClass("is-hover");
+                   }   
+                }, false);
+                element.addEventListener("mouseleave", function(event){
+                    var polygon = SVG.get("floor_"+dataRoom);
+                    if(polygon){
+                        polygon.removeClass("is-hover");
+                    }     
+                }, false);
+            });
+        }     
+    }
+    
+    /**
+     * init detail build
+     * @param {type} arJsonBuildParams object, coord 
+     * @returns {undefined}
+     */
+    function initDetailNewBuild(arJsonBuildParams){
+        
+        initHighlighteMapSvg();
+        /**
+         * draw svg map queus
+         * @returns {undefined}
+         */
+        function initHighlighteMapSvg(){
+            var loadImgFlag = false;
+            var img = document.getElementById("img-build-select");
+            if(!arJsonBuildParams.queues)return;
+            if(!img) return;
+            img.onload = function(e){
+                if(loadImgFlag) return;
+                loadImgFlag = true;
+                var img = e.target;
+                var draw = SVG('svg-build-select');
+                draw.viewbox({ x: 0, y: 0, width: img.naturalWidth, height: img.naturalHeight});
+                arJsonBuildParams.queues.forEach(function(element, index){
+                    var link = draw.link(element.link);
+                    var polygon = link.polygon(element.coord)
+                        .fill("transparent")
+                        .addClass('svg-hover');
+                    if(isTouch()){
+                        polygon.addClass('is-touch');
+                    }
+                    polygon.on("mouseenter", function() {
+                        this.addClass("is-hover");
+                        var linksQueue = document.querySelector(".list-queue__link[data-position-queue='"+element.id+"']"); //hover link
+                        linksQueue.classList.add("is-active");
+                    }).on("mouseleave", function() {
+                        this.removeClass("is-hover");
+                        var linksQueue = document.querySelector(".list-queue__link[data-position-queue='"+element.id+"']"); //hover link
+                        linksQueue.classList.remove("is-active");
+                    }).on("touchstart", function() {
+                        SVG.select('polygon.svg-hover').removeClass('is-hover');
+                        var AllLinksQueue = document.querySelectorAll(".list-queue__link.is-active"); //hover link
+                        [].forEach.call(AllLinksQueue, function(element, index){
+                            element.classList.remove('is-active');
+                        });
+                        this.addClass("is-hover");
+                        var linksQueue = document.querySelector(".list-queue__link[data-position-queue='"+element.id+"']"); //hover link
+                        linksQueue.classList.add("is-active");
+                    });
+                    polygon.attr({
+                        'id': "polygon_" + element.id,
+                        'title': element.title
+                    });       
+                });
+            };
+            if(img.complete){
+                var event = document.createEvent('Event');
+                event.initEvent('load', true, true);
+                img.dispatchEvent(event);
+            };
+            
+            //hover queue list => map
+            var linksQueue = document.querySelectorAll(".list-queue__link[data-position-queue]");
+            [].forEach.call(linksQueue, function(element, index){
+                if(!element.hasAttribute("data-position-queue")) return;
+                var dataRoom = element.getAttribute("data-position-queue");
+                element.addEventListener("mouseenter", function(event){
+                  var polygon = SVG.get("polygon_"+dataRoom);
+                   if(polygon){
+                    polygon.addClass("is-hover");
+                   }   
+                }, false);
+                element.addEventListener("mouseleave", function(event){
+                    var polygon = SVG.get("polygon_"+dataRoom);
+                    if(polygon){
+                        polygon.removeClass("is-hover");
+                    }     
+                }, false);
+            });
+        }
+
+        // ya map
+        loadScript("https://api-maps.yandex.ru/2.1/?apikey=8df11658-721a-456b-8c58-c7739c386faa&lang=ru_RU", function(){
+            ymaps.ready(function() {   
+                if(typeof arJsonBuildParams === "undefined") return;
+                initPositionBuild();
+                initRouteBuild();
+            });
+        });  
+        
+        // init route 
+        function initRouteBuild(){
+            var map;
+            var elementMap = document.getElementById("ya-map-route");
+
+            if (!elementMap) return;
+            map = new ymaps.Map("ya-map-route", {
+                center: arJsonBuildParams.coord,
+                zoom: 13,
+                controls: ['routePanelControl']
+            });
+            var control = map.controls.get('routePanelControl');
+            var myReverseGeocoder = ymaps.geocode(arJsonBuildParams.coord);
+            myReverseGeocoder.then(
+                function (res) {
+                    var firstGeoObject = res.geoObjects.get(0);
+                    var address =  firstGeoObject.getAddressLine();
+                    control.routePanel.state.set({
+                        type: 'masstransit',
+                        fromEnabled: true,
+                       // from: '',
+                        toEnabled: false,
+                        to: address
+                    });
+                },
+                function (err) {
+                    console.error(mess.ya_error_get_address);
+                }
+            );
+            control.routePanel.options.set({
+                allowSwitch: false,
+                reverseGeocoding: true,
+                types: { masstransit: true, pedestrian: true, taxi: true }
+            });
+            var switchPointsButton = new ymaps.control.Button({
+                data: {content: mess.ya_swap, title: mess.ya_swap_point},
+                options: {selectOnClick: false, maxWidth: 160, 
+                    float: 'none',
+                    position: {
+                        top: '170px',
+                        left: '15px'
+                    }
+                }
+            });
+            switchPointsButton.events.add('click', function () {
+                control.routePanel.switchPoints();
+            });
+            map.controls.add(switchPointsButton);
+        }
+        // init map position
+        function initPositionBuild(){
+            var map;
+            var elementMap = document.getElementById("ya-map-build");
+            var markers = {
+                "under-construction" : _options.templatePath + '/svg/marker-new.svg',
+                "planned":  _options.templatePath + '/svg/marker-planned.svg',
+                "built": _options.templatePath + '/svg/marker-ready.svg'
+            };
+            if (!elementMap) return;
+            map = new ymaps.Map("ya-map-build", {
+                center: arJsonBuildParams.coord,
+                zoom: 13,
+                controls: []
+            });
+            if ('ontouchstart' in document.documentElement) {
+                map.behaviors.disable('drag');
+                map.behaviors.disable('scrollZoom');
+                map.behaviors.disable('dblClickZoom');
+                //map.behaviors.disable('multiTouch');
+            }
+
+            var myPlacemark = new ymaps.Placemark(arJsonBuildParams.coord, {
+            }, {
+                    iconLayout: 'default#image',
+                    iconImageHref: markers[arJsonBuildParams.type],
+                    iconImageSize: [24, 36],
+                    iconImageOffset: [-12, -36]
+                });
+            map.geoObjects.add(myPlacemark);
+        }
+        
+        if(arJsonBuildParams.print === "Y"){
+            setTimeout(function(){
+                window.print();
+            },1000); 
+        }
+    }
+    
+    function initListApartaments(){
+        var AjaxProgress = false;
+        document.addEventListener("click", function(event){
+            var target = event.target;
+            while(target !== this){
+                if(target.tagName === "A" && target.hasAttribute("data-load-ajax-list")){ 
+                    if(event.which !== 1) return;
+                    var containerNews = document.querySelector(".apartment-list");
+                    var containerNav = document.querySelector(".js-nav-list");
+                    var loaderNav = document.querySelector(".ajax-pagination_loader");
+                    if(!AjaxProgress){
+                        AjaxProgress = true;
+                      //  NProgress.start();
+                        target.disabled = true;
+                        target.classList.add("d-none");
+                        loaderNav.classList.remove("d-none");
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('GET', target.href + "&AJAX_PAGE=Y");
+                        xhr.setRequestHeader('X-REQUESTED-WITH', 'XMLHttpRequest');
+                        xhr.onreadystatechange = function() {
+                        //    NProgress.inc();
+                            if (xhr.readyState !== 4) return;
+                            AjaxProgress = false;
+                            if (xhr.status !== 200) {
+                                console.error(xhr.status + ': ' + target.href);
+                            } else { 
+                                history.pushState({"ajax_load_news": "y"}, document.title, target.href);
+                                var parser = new DOMParser();
+                                var doc = parser.parseFromString(this.responseText,"text/html");
+
+                                var news = doc.querySelector(".apartment-list");
+                                containerNews.innerHTML = containerNews.innerHTML + news.innerHTML; 
+
+                                var nav = doc.querySelector(".js-nav-list");
+                                containerNav.innerHTML = nav.innerHTML; 
+                                var btn = containerNav.querySelector(".btn");
+                                if(btn){
+                                    Waves.attach(btn, ['waves-light']);
+                                    Waves.init();
+                                }
+                                _responsiveBg();
+                                initCaruselListApartaments();
+                                setHeightItems.reInit();   
+                            }
+                        };
+                        xhr.onloadend = function(){
+                            AjaxProgress = false;
+                            target.disabled = false;
+                            target.classList.remove("d-none");
+                            loaderNav.classList.add("d-none");
+                       //     NProgress.done();
+                        };
+                        xhr.send();
+                    }
+                    event.preventDefault();
+                    return;
+                }
+                target = target.parentNode;
+            }
+        },false);
+        
+        window.addEventListener("popstate", function(){
+             document.location.reload();
+        },false);           
+    }
+    /**
+     * carusel в списке квартир
+     * @returns {undefined}
+     */
+    function initCaruselListApartaments(){
+        $('.item-photo-slider:not(.slick-initialized)').slick({
+            dots: false,
+            infinite: false,
+            speed: 300,
+            arrows: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            prevArrow: '<button type="button" class="slick-prev-xs"><i class="fas fa-long-arrow-alt-left"></i></button>',
+            nextArrow: '<button type="button" class="slick-next-xs"><i class="fas fa-long-arrow-alt-right"></i></button>'
+        });
+    }
+    /**
+     * ajax перходы очереди - этажи - квартиры
+     * @returns {undefined}
+     */
+    function _routeObjectDetail(){
+        var container = document.getElementById("js-object-detail");
+        if(!container) return;
+        
+        var AjaxProgress = false;
+        
+        container.addEventListener("click", function(event){
+            if(event.which !== 1) return;
+            var target = event.target;
+            while(target !== this){                
+                if(target.tagName.toUpperCase() === "A"&& target.hasAttribute("data-switch-object")){
+                    var link = target.getAttribute("href");
+                    ajaxSwitchObject(link, true);
+                    event.preventDefault();
+                    return;
+                }
+                target = target.parentNode;
+            }
+        },false);
+        
+        window.addEventListener("popstate", function(){
+            if(event.state && event.state.ajax_switch_object){
+                ajaxSwitchObject(document.location, false);
+            } else {
+                document.location.reload();
+            }
+        },false);   
+        
+        function ajaxSwitchObject(link, saveHistory){
+            if(!AjaxProgress){
+                AjaxProgress = true;
+                NProgress.start();
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', link + "?ajax-page=Y", true);
+                xhr.setRequestHeader('X-REQUESTED-WITH', 'XMLHttpRequest');
+                xhr.onreadystatechange = function() { 
+                    NProgress.inc();
+                    if (xhr.readyState !== 4) return;
+                    AjaxProgress = false;
+                    if (xhr.status !== 200) {
+                        console.error(xhr.status + ': ' + link);
+                    } else { 
+                        if(saveHistory){
+                            history.pushState({"ajax_switch_object": "y"}, document.title, link);
+                        }
+                        var parser = new DOMParser();
+                        var doc = parser.parseFromString(this.responseText,"text/html");
+                        //content
+                        var elHtml = doc.getElementById("js-object-detail");
+                        var container = document.getElementById("js-object-detail");
+                        var slick = container.querySelector('.b-photo__thumds-carusel'); //удалить slick при прееходе с детальной
+                        if(slick){
+                            $(slick).slick('unslick');
+                        }
+                        var imagesLoad = elHtml.getElementsByTagName("IMG");
+                        var hieghtContainer = container.clientHeight;
+                        if(imagesLoad.length > 0){
+                            container.style.minHeight = hieghtContainer + "px";
+                        }
+                        //set height container
+                        var imagesLoadQueue = [];
+                        [].forEach.call(imagesLoad, function(element, index){
+                            var loadImgFlag = false;
+                            element.addEventListener('load', function () {
+                                if(loadImgFlag) return;
+                                setMinHeight();
+                            }, false);
+                            if (element.complete) {
+                                loadImgFlag = true;
+                                setMinHeight();
+                            }
+                        });
+                        function setMinHeight(){
+                            imagesLoadQueue.push(true);
+                            if(imagesLoadQueue.length === imagesLoad.length){
+                                setTimeout(function(){
+                                    container.style.minHeight = "450px";
+                                },400);
+                            }
+                        }
+                        container.classList.remove("fadeIn");
+                        container.classList.add("animated250");
+                        container.classList.add("fadeOut");
+                        if(container && elHtml){
+                            setTimeout(function(){
+                                container.classList.remove("fadeOut");
+                                container.classList.add("fadeIn");
+                                container.innerHTML = elHtml.innerHTML;
+                                // breadcrumb
+                                var elBreadcrumb = doc.getElementById("js-breadcrumb");
+                                var pageBreadcrumb = document.querySelector(".breadcrumb");
+                                if(elBreadcrumb && pageBreadcrumb){
+                                    pageBreadcrumb.innerHTML =  elBreadcrumb.innerHTML;
+                                }
+                                // title 
+                                var elTitle = doc.getElementById("js-title");
+                                var pageTitle = document.querySelector(".title-page");
+                                if(pageTitle && elTitle){
+                                    pageTitle.innerHTML =  elTitle.innerHTML;
+                                }
+                                // title browser
+                                var elTitleBrowser = doc.getElementById("js-title-browser");
+                                if(elTitleBrowser){
+                                    document.title = elTitleBrowser.innerHTML;
+                                }
+                                //eval script
+                                var scripts = container.getElementsByTagName("script");
+                                [].forEach.call(scripts, function(element, index){
+                                    eval(element.innerHTML);
+                                });
+                            },250);
+                        }
+                    }
+                };
+                xhr.onloadend = function() { 
+                    AjaxProgress = false;
+                    NProgress.done();
+                };
+                xhr.send();
+            }
+        }
+    }
+    
+    /**
+     * load script async
+     * @param {type} url
+     * @param {type} callback
+     * @returns {undefined}
+     */
+    function loadScript(url, callback){
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+
+        if (script.readyState){  //IE
+            script.onreadystatechange = function(){
+                if (script.readyState === "loaded" ||
+                        script.readyState === "complete"){
+                    script.onreadystatechange = null;
+                    callback();
+                }
+            };
+        } else {
+            script.onload = function(){
+                callback();
+            };
+        }
+        script.src = url;
+        document.getElementsByTagName("head")[0].appendChild(script);
+    }
+
+    return {
+        init: init,
+        load: load,
+        yaMapContacts: yaMapContacts,
+        initYaMapInBuilds: initYaMapInBuilds,
+        initDetailNewBuild: initDetailNewBuild,
+        initDetailQueue: initDetailQueue,
+        initDetailFloor: initDetailFloor,
+        initDetailApartament: initDetailApartament,
+        initListApartaments: initListApartaments,
+        initCaruselListApartaments: initCaruselListApartaments,
+        loadScript: loadScript,
+        isTouch: isTouch
+    };
+}();
+
+window.addEventListener("load", function () {
+    App.load();
+}, false);
+
+$(document).ready(function () {
+    App.init();
+});

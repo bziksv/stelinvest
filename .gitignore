@@ -1,0 +1,71 @@
+# Паттерны с / внутри — только от корня репо, поэтому **/ чтобы
+# сработало для stelinvest.ru/bitrix/... и для public_html как корня.
+
+# --- Секреты и окружение ---
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Битрикс: пароль БД, crypto_key
+**/bitrix/.settings.php
+**/bitrix/.settings_extra.php
+**/bitrix/php_interface/dbconn.php
+**/bitrix/php_interface/dbconn.local.php
+**/bitrix/license_key.php
+
+# Локальный dev
+**/.local/db.env
+**/.local/run/
+**/.local/backup/
+
+# Токен MacroCRM
+**/local/php_interface/include/constant.php
+
+# Ключи, сертификаты, креды
+*.pem
+*.p12
+*.key
+id_rsa
+id_rsa.pub
+credentials.json
+*credentials*
+auth.json
+
+# --- Кеш и служебное Битрикс ---
+**/bitrix/cache/
+**/bitrix/managed_cache/
+**/bitrix/stack_cache/
+**/bitrix/html_pages/
+**/bitrix/backup/
+**/bitrix/updates/
+**/bitrix/tmp/
+**/bitrix/.bx_stat
+*.log
+*.bak
+
+# Пользовательские загрузки
+upload/
+
+# --- Дампы и архивы ---
+*.sql
+*.sql.gz
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.rar
+*.7z
+
+# --- IDE и ОС ---
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+Thumbs.db
+
+# --- Зависимости фронта ---
+node_modules/
+npm-debug.log*
+yarn-error.log*

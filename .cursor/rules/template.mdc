@@ -1,0 +1,18 @@
+---
+description: Шаблон stelApative — вёрстка, JS, виджеты
+globs: "**/local/templates/stelApative/**"
+alwaysApply: false
+---
+
+# Шаблон stelApative
+
+- Шапка/меню/телефоны: `header.php`
+- Подвал, формы, аналитика, MacroCRM-виджет: `footer.php`
+- Поведение UI: `js/init.js` (объект `App`)
+- Сборка: `build/script.min.js`, `build/style.min.css` — не править минifikаты, если есть исходник
+
+Не переименовывать папку `stelApative`. Телефоны — `tplvar()`, с классами `roistat-phone-*`.
+
+Модалки форм подключаются через `sect_forms.php` (include suffix `forms` из футера).
+
+После правок вёрстки или JS напомнить сбросить кеш Битрикс и при необходимости `bitrix/html_pages/`.

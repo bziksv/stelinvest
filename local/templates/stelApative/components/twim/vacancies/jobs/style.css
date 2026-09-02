@@ -1,0 +1,4 @@
+.jobs__btn div{
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

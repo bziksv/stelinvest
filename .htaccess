@@ -1,0 +1,144 @@
+php_value max_input_vars 50000
+
+<RequireAll>
+    Require all granted
+
+    Require not ip 49.13.193.0/24
+    Require not ip 5.139.230.0/24
+    Require not ip 5.139.253.0/24
+    Require not ip 31.181.248.0/24
+    Require not ip 37.18.38.0/24
+    Require not ip 37.77.111.0/24
+    Require not ip 45.140.18.0/24
+    Require not ip 62.183.46.0/24
+    Require not ip 77.110.108.0/24
+    Require not ip 83.239.97.0/24
+    Require not ip 85.172.109.0/24
+    Require not ip 85.174.205.0/24
+    Require not ip 85.175.197.0/24
+    Require not ip 85.175.217.0/24
+    Require not ip 91.233.43.0/24
+    Require not ip 95.153.163.0/24
+    Require not ip 95.153.177.0/24
+    Require not ip 95.153.178.0/24
+    Require not ip 95.153.180.0/24
+    Require not ip 95.25.184.0/24
+    Require not ip 178.176.211.0/24
+    Require not ip 185.10.173.0/24
+    Require not ip 188.162.140.0/24
+    Require not ip 188.162.143.0/24
+    Require not ip 188.170.169.0/24
+    Require not ip 217.78.231.0/24
+</RequireAll>
+
+Options -Indexes 
+ErrorDocument 404 /404.php
+
+<IfModule mod_php7.c>
+  php_flag session.use_trans_sid off
+  #php_value display_errors 1
+  php_value mbstring.internal_encoding UTF-8
+  php_value mbstring.func_overload 0
+  php_value mbstring.func_toalias 1
+  php_value max_input_vars 50000
+  php_value auto_prepend_file "/home/s/stelinvst/stelinvest.ru/public_html/bitrix/modules/security/tools/start.php" 
+</IfModule>
+
+<IfModule mod_rewrite.c>
+  Options +FollowSymLinks
+  
+  RewriteBase /
+  RewriteEngine On
+  
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_URI} !(.*)/$
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$0/ [L,R=301]
+  
+  RewriteCond %{THE_REQUEST} //   
+  RewriteRule .* https://%{HTTP_HOST}/$0 [R=301,L] 
+
+  RewriteCond %{HTTP_HOST} ^www.stelinvest.ru$
+  RewriteRule ^(.*)$ https://stelinvest.ru/$1 [R=301,L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-l
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !/bitrix/urlrewrite.php$
+  RewriteRule ^(.*)$ /bitrix/urlrewrite.php [L]
+  RewriteRule .* - [E=REMOTE_USER:%{HTTP:Authorization}]
+
+
+##########################СТАТЬИ И ПРОЧЕЕ####################################
+	Redirect 301 /poleznoe/Kak-pereoformit-kvartiru-v-2020-godu-sposoby-i-instrukciya /poleznoe/Kak-pereoformit-kvartiru-v-2022-godu-sposoby-i-instrukciya/
+	Redirect 301 /poleznoe/dizajn-kuhni-2019-foto-idei-stili /poleznoe/dizajn-kuhni-2022-foto-idei-stili/
+	Redirect 301 /poleznoe/Kak-prodat-kvartiru-samostoyatelno-v-2019-godu /poleznoe/Kak-prodat-kvartiru-samostoyatelno/
+	Redirect 301 /poleznoe/Kak-uzakonit-pereplanirovku-kvartiry-v-2019-instrukciya/ /poleznoe/Kak-uzakonit-pereplanirovku-kvartiry-instrukciya/
+	Redirect 301 /poleznoe/kak-privatizirovat-kvartiru-v-2022-poshagovaya-instruktsiya/ /poleznoe/kak-privatizirovat-kvartiru-v-2023-poshagovaya-instruktsiya/
+	Redirect 301 /poleznoe/dizajn-kuhni-2022-foto-idei-stili/ /poleznoe/dizajn-kuhni-2023-foto-idei-stili/
+	Redirect 301 /poleznoe/kak-pereoformit-kvartiru-v-2022-godu-sposoby-i-instrukciya/ /poleznoe/kak-pereoformit-kvartiru-v-2023-godu-sposoby-i-instrukciya/
+		Redirect 301 /poleznoe/kak-privatizirovat-kvartiru-v-2023-poshagovaya-instruktsiya/ /poleznoe/kak-privatizirovat-kvartiru-poshagovaya-instruktsiya/
+		Redirect 301 /poleznoe/kak-pereoformit-kvartiru-v-2023-godu-sposoby-i-instrukciya/ /poleznoe/kak-pereoformit-kvartiru-sposoby-i-instrukciya/
+		Redirect 301 /poleznoe/dizajn-kuhni-2023-foto-idei-stili/ /poleznoe/dizajn-kuhni-foto-idei-stili/
+##############################################################################
+
+
+
+
+</IfModule>
+
+<IfModule mod_dir.c>
+  DirectoryIndex index.php index.html
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive on
+  ExpiresByType image/jpeg "access plus 3 day"
+  ExpiresByType image/gif "access plus 3 day"
+  ExpiresByType image/png "access plus 3 day"
+  ExpiresByType text/css "access plus 3 day"
+  ExpiresByType application/javascript "access plus 3 day"  
+</IfModule>
+
+<IfModule mod_deflate.c>
+    # Выставляем заголовок Content-Encoding: gzip.
+    AddEncoding gzip .gz
+
+    # Для favicon.ico
+    AddOutputFilterByType DEFLATE image/x-icon
+    # Для CSS-файлов.
+    AddOutputFilterByType DEFLATE text/css
+    # Для JavaScript-файлов.
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    # Для остальных типов файлов.
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/x-component
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/atom+xml
+    AddOutputFilterByType DEFLATE font/truetype
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE image/svg+xml
+
+    # Отключаем сжатие для тех браузеров, у которых проблемы
+    # с его распознаванием.
+    BrowserMatch "MSIE [456]" no_gzip dont-vary
+    BrowserMatch "SV1;" !no_gzip !dont-vary
+    BrowserMatch "Opera" !no_gzip !dont-vary
+    BrowserMatch "Firefox/[0-3]\." gzip-only-text/html
+    BrowserMatch "Firefox/3\.[1-9]" !gzip-only-text/html
+    BrowserMatch "Chrome/2" gzip-only-text/html
+    BrowserMatch "Safari" gzip-only-text/html
+    BrowserMatch "Konqueror" gzip-only-text/html
+</IfModule>
+php_value default_charset utf-8
+AddType 'text/html; charset=utf-8' .html .htm .shtml

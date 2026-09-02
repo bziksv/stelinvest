@@ -1,0 +1,22 @@
+---
+description: Кастомный PHP Битрикс — инфоблоки, формы, события
+globs: "**/local/**/*.php,*.php,includes/**/*.php,**/index.php,**/sect_*.php"
+alwaysApply: false
+---
+
+# PHP / Битрикс
+
+Инфоблоки — константы из `local/php_interface/include/constant.php` или уже используемые ID. Не выдумывать новые ID.
+
+- `IBLOCK_OBJECT_ID` (6) — объекты, `/buildings/`
+- `IBLOCK_APARTAMENT_ID` (7) — квартиры, `/stroyawiesya_doma/`
+- также: 1 новости, 2 полезное, 3 вакансии, 8 баннеры, 9 ход строительства, 10 информация, 11 XML
+
+Веб-формы:
+- ID 2 — обратный звонок (в Битрикс, хук CRM пустой)
+- ID 3 — заявка → MacroCRM в `event_handlers.php`
+
+События и CRM — только `local/php_interface/include/event_handlers.php`.
+Новые компоненты — в `local/components/twim/`, шаблоны — в `local/templates/stelApative/components/`.
+
+Не подключать ядро Битрикс вручную на обычных страницах (`header.php` / `footer.php` как сейчас). Не править `bitrix/modules/`.

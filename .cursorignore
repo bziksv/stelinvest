@@ -1,0 +1,76 @@
+# Индексируем только проектный код: local/, страницы разделов, README, правила.
+# Ядро Битрикс, медиа и дампы в поиск не нужны (~8+ ГБ).
+
+# --- Дампы и архивы ---
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.rar
+*.7z
+*.sql
+*.sql.gz
+
+# --- Битрикс: кеш и служебное ---
+bitrix/cache/
+bitrix/managed_cache/
+bitrix/stack_cache/
+bitrix/html_pages/
+bitrix/backup/
+bitrix/updates/
+bitrix/tmp/
+bitrix/*.log
+
+# --- Битрикс: ядро (кастом в local/) ---
+bitrix/modules/
+bitrix/components/
+bitrix/js/
+bitrix/css/
+bitrix/wizards/
+bitrix/blocks/
+bitrix/images/
+bitrix/themes/
+bitrix/fonts/
+bitrix/panel/
+bitrix/admin/
+bitrix/gadgets/
+bitrix/templates/
+bitrix/sounds/
+
+# --- Секреты: не индексировать ---
+bitrix/.settings.php
+bitrix/.settings_extra.php
+bitrix/php_interface/dbconn.php
+bitrix/license_key.php
+local/php_interface/include/constant.php
+.env
+.env.*
+
+# --- Медиа и загрузки (~7 ГБ) ---
+upload/
+images/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.ico
+*.mp4
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.csv
+*.woff
+*.woff2
+*.ttf
+*.eot
+
+# --- Логи, OS, IDE ---
+*.log
+*.bak
+.DS_Store
+.idea/
+Thumbs.db
+node_modules/

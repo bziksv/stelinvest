@@ -1,0 +1,24 @@
+---
+description: Карта проекта СТЭЛ-Инвест — куда править и куда не лезть
+alwaysApply: true
+---
+
+# Карта проекта
+
+Сайт застройщика на 1С-Битрикс. Корень git = document root (`public_html`). Локально папка может называться `stelinvest.ru/`.
+
+Править только:
+- `local/` — кастом (php_interface, components/twim, шаблон)
+- страницы разделов в корне сайта (`index.php`, `about/`, `buildings/`, `stroyawiesya_doma/` и т.д.)
+- `includes/`
+
+Не трогать ядро `bitrix/` (кроме чтения конфигов при необходимости). Не коммитить кеш, `upload/`, дампы.
+
+Шаблон сайта: `local/templates/stelApative` (имя с опечаткой, не переименовывать).
+
+Два каталога квартир — не смешивать:
+- Битрикс: `/stroyawiesya_doma/` (ИБ 7, `twim:news`)
+- MacroCRM: пункт меню «Квартиры» (`/#/macrocatalog/...`) и виджет в футере
+
+Телефоны и почта — только `tplvar('phonesale1')` и аналоги, не хардкод.
+Подробности: `README.md`.

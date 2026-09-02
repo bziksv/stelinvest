@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<complexes>
+	<complex>
+		<id>107648</id>
+		<name>Жилой Дом по улице Беговая, 61</name>
+		<latitude>51.698004</latitude>
+		<longitude>51.698004, 39.184262</longitude>
+		<address>г.Воронеж, Беговая, 61</address>
+		<description_main>
+			<title/>
+			<text>ЖК НА БЕГОВОЙ - проект для тех, кто любит сдержанность и конструктивность, современный стиль и разумный минимализм. Ничего лишнего! — отметите Вы. Но при этом и сам жилой комплекс, и инфраструктура двора, и расположенные рядом объекты социальной и бытовой инфраструктуры включают все необходимое для комфортной жизни.</text>
+		</description_main>
+		<images>
+			<image>https://stelinvest.ru/upload/resize_cache/iblock/e97/1226_690_2/2359_K_AGO_Begovaya-61-_1_26.jpg</image>
+		</images>
+		<buildings>
+			<building>
+				<id>149734</id>
+				<fz_214>да</fz_214>
+				<name>г.Воронеж, Беговая, 61</name>
+				<floors>13</floors>
+				<building_state>built</building_state>
+				<built_year>2020</built_year>
+				<ready_quarter>3</ready_quarter>
+				<building_type>кирпичный</building_type>
+				<flats>
+				<flat>
+						<flat_id>100005</flat_id>
+						<apartment>5</apartment>
+						<floor>2</floor>
+						<room>2</room>
+						<price>3358800</price>
+						<area>62,2</area>
+						<kitchen_area>14,0</kitchen_area>
+						<living_area>30,4</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/5.jpg
+						</plan>
+					</flat>
+					
+					
+					<flat>
+						<flat_id>100029</flat_id>
+						<apartment>29</apartment>
+						<floor>8</floor>
+						<room>2</room>
+						<price>3358800</price>
+						<area>62,2</area>
+						<kitchen_area>14,0</kitchen_area>
+						<living_area>30,4</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/5.jpg
+						</plan>
+					</flat>	
+					
+					<flat>
+						<flat_id>100038</flat_id>
+						<apartment>34</apartment>
+						<floor>9</floor>
+						<room>1</room>
+						<price>2398000</price>
+						<area>43,6</area>
+						<kitchen_area>13,5</kitchen_area>
+						<living_area>16,0</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/34.jpg
+						</plan>
+					</flat>
+					
+					<flat>
+						<flat_id>100036</flat_id>
+						<apartment>36</apartment>
+						<floor>10</floor>
+						<room>2</room>
+						<price>3331800</price>
+						<area>61,70</area>
+						<kitchen_area>10,50</kitchen_area>
+						<living_area>31,00</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/36.jpg
+						</plan>
+					</flat>
+					
+					<flat>
+						<flat_id>100041</flat_id>
+						<apartment>41</apartment>
+						<floor>2</floor>
+						<room>3</room>
+						<price>4441400</price>
+						<area>83,80</area>
+						<kitchen_area>13,80</kitchen_area>
+						<living_area>48,70</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/41.jpg
+						</plan>
+					</flat>
+					
+					<flat>
+						<flat_id>100047</flat_id>
+						<apartment>47</apartment>
+						<floor>3</floor>
+						<room>1</room>
+						<price>2392500</price>
+						<area>43,50</area>
+						<kitchen_area>18,60</kitchen_area>
+						<living_area>10,80</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/47.jpg
+						</plan>
+					</flat>
+															
+					<flat>
+						<flat_id>100055</flat_id>
+						<apartment>55</apartment>
+						<floor>4</floor>
+						<room>2</room>
+						<price>3525600</price>
+						<area>67,80</area>
+						<kitchen_area>13,70</kitchen_area>
+						<living_area>34,50</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/55.jpg
+						</plan>
+					</flat>
+					
+											
+					<flat>
+						<flat_id>100084</flat_id>
+						<apartment>84</apartment>
+						<floor>10</floor>
+						<room>1</room>
+						<price>2491500</price>
+						<area>45,30</area>
+						<kitchen_area>11,80</kitchen_area>
+						<living_area>18,00</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/84.jpg
+						</plan>
+					</flat>
+					
+					<flat>
+						<flat_id>100090</flat_id>
+						<apartment>90</apartment>
+						<floor>11</floor>
+						<room>2</room>
+						<price>3525600</price>
+						<area>67,80</area>
+						<kitchen_area>13,70</kitchen_area>
+						<living_area>34,50</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/90.jpg
+						</plan>
+					</flat>
+					
+					<flat>
+						<flat_id>100092</flat_id>
+						<apartment>92</apartment>
+						<floor>12</floor>
+						<room>1</room>
+						<price>2381500</price>
+						<area>43,30</area>
+						<kitchen_area>10,80</kitchen_area>
+						<living_area>18,60</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/92.jpg
+						</plan>
+					</flat>
+					
+					<flat>
+						<flat_id>100094</flat_id>
+						<apartment>94</apartment>
+						<floor>12</floor>
+						<room>1</room>
+						<price>2491500</price>
+						<area>45,30</area>
+						<kitchen_area>11,80</kitchen_area>
+						<living_area>18,00</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/94.jpg
+						</plan>
+					</flat>
+					
+					<flat>
+						<flat_id>100095</flat_id>
+						<apartment>95</apartment>
+						<floor>12</floor>
+						<room>2</room>
+						<price>3525600</price>
+						<area>67,80</area>
+						<kitchen_area>13,70</kitchen_area>
+						<living_area>34,50</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>
+						http://stelinvest.ru/images/107648/95.jpg
+						</plan>
+					</flat>
+					
+				</flats>
+				
+			</building>
+		</buildings>
+		<sales_info>
+			<sales_phone>+74732250834</sales_phone>
+			<responsible_officer_phone>+74732250834</responsible_officer_phone>
+			<address>г.Воронеж, Московский проспект, 109А</address>
+				<timezone>UTC/GMT+3</timezone>
+		</sales_info>
+		<developer>
+			<name>ООО Специализированный застройщик "Стэл-инвест"</name>
+			<id>234160</id>
+			<site>http://stelinvest.ru</site>
+			<phone>+7 473 225-08-34</phone>
+		</developer>
+	</complex>
+</complexes>

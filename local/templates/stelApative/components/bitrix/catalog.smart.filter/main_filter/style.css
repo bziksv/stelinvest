@@ -1,0 +1,25 @@
+.title-page{
+    font-family: OpenSansExtraBold;
+    font-weight: 500;
+}
+.filter-link{}
+.filter-link .link-item{
+    -o-transition: opacity .15s ease-out,visibility .15s ease-out;
+    -webkit-box-shadow: 0 3px 20px rgba(0,0,0,.16);
+    -webkit-transition: opacity .15s ease-out,visibility .15s ease-out;
+    background-color: #fff;
+    box-shadow: 0 3px 20px rgba(0,0,0,.16);
+    transition: opacity .15s ease-out,visibility .15s ease-out;
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+}
+.filter-link .link-item a{
+    color: #3e54ff;
+    text-decoration: none;
+}
+.filter-link .link-item span{
+    color: #b3b3b3;
+    font-size: 12px;
+}

@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<complexes>
+	<complex>
+		<id>107731</id>
+		<name>ЖК Шестое чувство</name>
+		<latitude>51.722255</latitude>
+		<longitude>39.140720</longitude>
+		<address>г.Воронеж, Независимости, 55л</address>
+		<description_main>
+			<title/>
+			<text>Жилой комплекс, воплощающий принципы «гуманной архитектуры», открытости и прозрачности, реализующий необычный подход к созданию комфортной дворовой среды — это обновленный объект застройщика «Стэл-инвест» в мкр. Подгорное.
+ЖК «Шестое чувство» - это о том, как вы себя будете чувствовать в собственном доме и дворе. Какие эмоции будете испытывать, смотря на вид за окном, выходя на утреннюю пробежку, гуляя с собакой. «Шестое чувство» — это об ощущении свободы, безопасности и комфорта в рамках отдельно взятого двора.</text>
+		</description_main>
+		<images>
+			<image>https://stelinvest.ru/upload/medialibrary/3d6/vid_01_1.jpg</image>
+		</images>
+		<buildings>
+			<building>
+				<id>153620</id>
+				<fz_214>да</fz_214>
+				<name>г.Воронеж, Независимости, 55л 2/2 </name>
+				<floors>16</floors>
+				<building_state>built</building_state>
+				<built_year>2021</built_year>
+				<ready_quarter>3</ready_quarter>
+				<building_type>кирпичный</building_type>
+				<flats>
+																						
+					<flat>
+						<flat_id>129783</flat_id>
+						<apartment>2</apartment>
+						<floor>1</floor>
+						<room>3</room>
+						<price>4131000</price>
+						<area>91,80</area>
+						<kitchen_area>15,70</kitchen_area>
+						<living_area>44,00</living_area>
+						<balcony>Лоджия</balcony>
+						<renovation>да</renovation>
+						<window_view>Во двор и на улицу</window_view>
+						<bathroom>Совмещенный</bathroom>
+						<plan>https://stelinvest.ru/upload/iblock/d04/3.jpg</plan>
+					</flat>
+
+				</flats>
+			</building>
+		</buildings>
+		<sales_info>
+			<sales_phone>+74732250834</sales_phone>
+			<responsible_officer_phone>+74732250834</responsible_officer_phone>
+			<address>г.Воронеж, Московский проспект, 109А</address>
+				<timezone>UTC/GMT+3</timezone>
+		</sales_info>
+		<developer>
+			<name>ООО Специализированный застройщик "Стэл-инвест"</name>
+			<id>234160</id>
+			<site>http://stelinvest.ru</site>
+			<phone>+7 473 225-08-34</phone>
+		</developer>
+	</complex>
+</complexes>
